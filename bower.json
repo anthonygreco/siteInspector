@@ -1,0 +1,9 @@
+{
+  "name": "siteInspector",
+  "version": "0.1.0",
+  "dependencies": {
+    "jquery": "~1.8.3",
+    "font-awesome": "~4.0.0",
+    "uniqueSelector": "git@github.com:anthonygreco/uniqueSelector.git"
+  }
+}

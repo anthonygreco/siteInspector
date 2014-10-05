@@ -1,0 +1,75 @@
+#uiWrapper {
+  width: auto;
+  height: 40px;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(80, 80, 80, 0.8);
+  border-top: 1px solid #000000;
+  z-index: 100000;
+}
+
+#uiWrapper div {
+  cursor: pointer;
+  display: inline-block;
+  border-right: 1px solid #000000;
+}
+
+#uiWrapper i {
+  font-size: 24px;
+  color: #000000;
+  line-height: 40px;
+  padding: 0 15px;
+}
+
+#uiWrapper i.active {
+  color: #1182d8;
+}
+
+#overlay {
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 99998;
+}
+
+.cover {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.tag {
+  position: fixed;
+  z-index: 99999;
+  background: rgba(10, 10, 10, 0.75);
+  color: #ffffff;
+  padding: 3px 8px;
+  display: none;
+}
+
+.tag .node {
+  color: #a929b5;
+}
+
+.tag .id {
+  color: #238bed;
+}
+
+.tag .className {
+  color: #ce7433;
+}
+
+.tag .dimensions {
+  color: #aaaaaa;
+}
+
+.tag .dimensions i {
+  font-size: 0.6em;
+  color: #cccccc;
+  position: relative;
+  top: -2px;
+  padding: 0 3px;
+}

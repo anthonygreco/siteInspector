@@ -1,0 +1,39 @@
+{
+  "name": "siteInspector",
+  "title": "Site Inspector",
+  "description": "A jQuery plugin to inspect a site's markup.",
+  "keywords": [
+    "jquery",
+    "inspector",
+    "markup",
+    "plugins"
+  ],
+  "version": "0.1.0",
+  "author": {
+    "name": "Anthony Greco",
+    "email": "anthony.greco@gmail.com",
+    "url": "https://github.com/anthonygreco"
+  },
+  "maintainers": [
+    {
+      "name": "Anthony Greco",
+      "email": "anthony.greco@gmail.com",
+      "url": "https://github.com/anthonygreco"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/anthonygreco/siteInspector/LICENSE"
+    }
+  ],
+  "bugs": "https://github.com/anthonygreco/siteInspector/issues",
+  "homepage": "https://github.com/anthonygreco/siteInspector",
+  "docs": "https://github.com/anthonygreco/siteInspector#readme",
+  "download": "https://github.com/anthonygreco/siteInspector",
+  "dependencies": {
+    "jquery": ">=1.8.3",
+    "font-awesome": ">=4.0.0",
+    "uniqueSelector": ">=0.1.0"
+  }
+}

@@ -159,6 +159,10 @@
       if(self.options.showTags) {
         $('.tag').remove();
       }
+    },
+    isEnabled: function() {
+      var self = this;
+      return self.data.inspectionEnabled;
     }
   };
   $.fn.siteInspector = function(options) {

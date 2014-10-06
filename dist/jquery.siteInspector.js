@@ -29,11 +29,12 @@ jQuery.fn.extend({
         console.time('init');
       }
       self.data = {
-        mainTarget: element,
+        element: element,
         inspectionEnabled: false,
+        isFrozen: false,
         inspectionTarget: undefined
       };
-      self._buildUI(element);
+      self._buildUI();
       if(self.options.debug) {
         console.timeEnd('init');
       }
@@ -83,18 +84,20 @@ jQuery.fn.extend({
       var self = this;
       self.data.inspectionEnabled = !self.data.inspectionEnabled;
       if(self.data.inspectionEnabled) {
-        $(self.data.mainTarget).css('cursor', 'cell');
+        $(self.data.element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
-        $(self.data.mainTarget).find('*:not(.ui)').on({
+        $(self.data.element).find('*:not(.ui)').on({
           mouseenter: function(e) {
             self.data.inspectionTarget = e.currentTarget;
             self._highlightElement();
           }
         });
       } else {
-        $(self.data.mainTarget).css('cursor', 'default');
-        $(self.data.mainTarget).find('*:not(.ui)').off();
-        self._unhighlightElement();
+        $(self.data.element).css('cursor', 'default');
+        $(self.data.element).find('*:not(.ui)').off();
+        if(!self.data.isFrozen) {
+          self._unhighlightElement();
+        }
       }
     },
     _refreshDisplay: function() {
@@ -115,7 +118,7 @@ jQuery.fn.extend({
         }
         $('.tag').remove();
       }
-      var $tag = $('<div />', { class: 'tag ui' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.mainTarget);
+      var $tag = $('<div />', { class: 'tag ui' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
       $tag.css({
         top: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.top + elementInfo.height,
         left: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.left,
@@ -184,6 +187,10 @@ jQuery.fn.extend({
     isEnabled: function() {
       var self = this;
       return self.data.inspectionEnabled;
+    },
+    toggleFrozen: function() {
+      var self = this;
+      self.data.isFrozen = !self.data.isFrozen;
     }
   };
   $.fn.siteInspector = function(options) {

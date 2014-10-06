@@ -32,7 +32,6 @@
   "docs": "https://github.com/anthonygreco/siteInspector#readme",
   "download": "https://github.com/anthonygreco/siteInspector",
   "dependencies": {
-    "jquery": ">=1.8.3",
     "font-awesome": ">=4.0.0",
     "uniqueSelector": ">=0.1.0"
   }

@@ -41,10 +41,10 @@ jQuery.fn.extend({
     },
     _buildUI: function() {
       var self = this,
-      $cover = $('<div />', { class: 'cover uiInspector' }),
-      $overlay = $('<div />', { id: 'overlay', class: 'uiInspector' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
-      $inspectButton = $('<div />', { id: 'inspect', class: 'uiInspector' }).on(self._bindInspection()).append($('<i />', { class: 'fa fa-search uiInspector' })),
-      $uiBox = $('<div />', { id: 'uiWrapper', class: 'uiInspector' }).append($inspectButton);
+      $cover = $('<div />', { class: 'cover ui inspector' }),
+      $overlay = $('<div />', { id: 'overlay', class: 'ui inspector' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
+      $inspectButton = $('<div />', { id: 'inspect', class: 'ui inspector' }).on(self._bindInspection()).append($('<i />', { class: 'fa fa-search ui inspector' })),
+      $uiBox = $('<div />', { id: 'uiWrapper', class: 'ui inspector' }).append($inspectButton);
       $('body').append([$uiBox, $overlay]);
       self._bindWindowEvents();
     },
@@ -86,7 +86,7 @@ jQuery.fn.extend({
       if(self.data.inspectionEnabled) {
         $(self.data.element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
-        $(self.data.element).find('*:not(.uiInspector)').on({
+        $(self.data.element).find('*:not(.ui.inspector)').on({
           mouseenter: function(e) {
             self.data.inspectionTarget = e.currentTarget;
             self._highlightElement();
@@ -97,7 +97,7 @@ jQuery.fn.extend({
           self.toggleFrozen();
         }
         $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.uiInspector)').off();
+        $(self.data.element).find('*:not(.ui.inspector)').off();
         self.data.inspectionTarget = undefined;
         $('.cover').css({ width: 0, height: 0 });
         if(self.options.showTags) {
@@ -123,7 +123,7 @@ jQuery.fn.extend({
         }
         $('.tag').remove();
       }
-      var $tag = $('<div />', { class: 'tag uiInspector' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
+      var $tag = $('<div />', { class: 'tag ui inspector' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
       $tag.css({
         top: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.top + elementInfo.height,
         left: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.left,
@@ -132,10 +132,10 @@ jQuery.fn.extend({
     },
     _formatInfo: function() {
       var self = this,
-      nodeName = '<span class="uiInspector node">' + self.data.inspectionTarget.nodeName.toLowerCase() + '</span>',
-      id = ($(self.data.inspectionTarget).attr('id') !== undefined)? '<span class="uiInspector id">#' + $(self.data.inspectionTarget).attr('id') + '</span>' : '',
-      className = (self.data.inspectionTarget.className !== '')? '<span class="uiInspector className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
-      return nodeName + id + className + ' <span class="uiInspector dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="uiInspector fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
+      nodeName = '<span class="ui inspector node">' + self.data.inspectionTarget.nodeName.toLowerCase() + '</span>',
+      id = ($(self.data.inspectionTarget).attr('id') !== undefined)? '<span class="ui inspector id">#' + $(self.data.inspectionTarget).attr('id') + '</span>' : '',
+      className = (self.data.inspectionTarget.className !== '')? '<span class="ui inspector className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
+      return nodeName + id + className + ' <span class="ui inspector dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="ui inspector fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
     },
     _highlightElement: function() {
       var self = this,
@@ -190,10 +190,10 @@ jQuery.fn.extend({
       self.data.isFrozen = !self.data.isFrozen;
       if(self.data.isFrozen) {
         $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.uiInspector)').off();
+        $(self.data.element).find('*:not(.ui.inspector)').off();
       } else {
         $(self.data.element).css('cursor', 'cell');
-        $(self.data.element).find('*:not(.uiInspector)').on({
+        $(self.data.element).find('*:not(.ui.inspector)').on({
           mouseenter: function(e) {
             self.data.inspectionTarget = e.currentTarget;
             self._highlightElement();

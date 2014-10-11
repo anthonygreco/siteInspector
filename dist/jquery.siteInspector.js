@@ -41,10 +41,10 @@ jQuery.fn.extend({
     },
     _buildUI: function() {
       var self = this,
-      $cover = $('<div />', { class: 'cover ui' }),
-      $overlay = $('<div />', { id: 'overlay', class: 'ui' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
-      $inspectButton = $('<div />', { id: 'inspect', class: 'ui' }).on(self._bindInspection()).append($('<i />', { class: 'fa fa-search ui' })),
-      $uiBox = $('<div />', { id: 'uiWrapper', class: 'ui' }).append($inspectButton);
+      $cover = $('<div />', { class: 'cover uiInspector' }),
+      $overlay = $('<div />', { id: 'overlay', class: 'uiInspector' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
+      $inspectButton = $('<div />', { id: 'inspect', class: 'uiInspector' }).on(self._bindInspection()).append($('<i />', { class: 'fa fa-search uiInspector' })),
+      $uiBox = $('<div />', { id: 'uiWrapper', class: 'uiInspector' }).append($inspectButton);
       $('body').append([$uiBox, $overlay]);
       self._bindWindowEvents();
     },
@@ -123,7 +123,7 @@ jQuery.fn.extend({
         }
         $('.tag').remove();
       }
-      var $tag = $('<div />', { class: 'tag ui' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
+      var $tag = $('<div />', { class: 'tag uiInspector' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
       $tag.css({
         top: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.top + elementInfo.height,
         left: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.left,
@@ -132,10 +132,10 @@ jQuery.fn.extend({
     },
     _formatInfo: function() {
       var self = this,
-      nodeName = '<span class="ui node">' + self.data.inspectionTarget.nodeName.toLowerCase() + '</span>',
-      id = ($(self.data.inspectionTarget).attr('id') !== undefined)? '<span class="ui id">#' + $(self.data.inspectionTarget).attr('id') + '</span>' : '',
-      className = (self.data.inspectionTarget.className !== '')? '<span class="ui className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
-      return nodeName + id + className + ' <span class="ui dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="ui fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
+      nodeName = '<span class="uiInspector node">' + self.data.inspectionTarget.nodeName.toLowerCase() + '</span>',
+      id = ($(self.data.inspectionTarget).attr('id') !== undefined)? '<span class="uiInspector id">#' + $(self.data.inspectionTarget).attr('id') + '</span>' : '',
+      className = (self.data.inspectionTarget.className !== '')? '<span class="uiInspector className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
+      return nodeName + id + className + ' <span class="uiInspector dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="uiInspector fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
     },
     _highlightElement: function() {
       var self = this,

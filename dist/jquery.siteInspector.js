@@ -189,18 +189,6 @@ jQuery.fn.extend({
     toggleFrozen: function() {
       var self = this;
       self.data.isFrozen = !self.data.isFrozen;
-      if(self.data.isFrozen) {
-        $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.ui.inspector)').off();
-      } else {
-        $(self.data.element).css('cursor', 'cell');
-        $(self.data.element).find('*:not(.ui.inspector)').on({
-          mouseenter: function(e) {
-            self.data.inspectionTarget = e.currentTarget;
-            self._highlightElement();
-          }
-        });
-      }
     }
   };
   $.fn.siteInspector = function(options) {

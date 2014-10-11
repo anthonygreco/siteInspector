@@ -65,7 +65,7 @@
       if(self.data.inspectionEnabled) {
         $(self.data.element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
-        $(self.data.element).find('*:not(.ui)').on({
+        $(self.data.element).find('*:not(.uiInspector)').on({
           mouseenter: function(e) {
             self.data.inspectionTarget = e.currentTarget;
             self._highlightElement();
@@ -76,7 +76,7 @@
           self.toggleFrozen();
         }
         $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.ui)').off();
+        $(self.data.element).find('*:not(.uiInspector)').off();
         self.data.inspectionTarget = undefined;
         $('.cover').css({ width: 0, height: 0 });
         if(self.options.showTags) {
@@ -169,10 +169,10 @@
       self.data.isFrozen = !self.data.isFrozen;
       if(self.data.isFrozen) {
         $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.ui)').off();
+        $(self.data.element).find('*:not(.uiInspector)').off();
       } else {
         $(self.data.element).css('cursor', 'cell');
-        $(self.data.element).find('*:not(.ui)').on({
+        $(self.data.element).find('*:not(.uiInspector)').on({
           mouseenter: function(e) {
             self.data.inspectionTarget = e.currentTarget;
             self._highlightElement();

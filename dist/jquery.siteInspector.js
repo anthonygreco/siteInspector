@@ -88,20 +88,21 @@ jQuery.fn.extend({
         $('#uiWrapper #inspect i').addClass('active');
         $(self.data.element).find('*:not(.ui.inspector)').on({
           mouseenter: function(e) {
-            self.data.inspectionTarget = e.currentTarget;
-            self._highlightElement();
+            if(!self.data.isFrozen) {
+              self.data.inspectionTarget = e.currentTarget;
+              self._highlightElement();
+            }
           }
         });
       } else {
-        if(self.data.isFrozen) {
-          self.toggleFrozen();
-        }
-        $(self.data.element).css('cursor', 'default');
-        $(self.data.element).find('*:not(.ui.inspector)').off();
-        self.data.inspectionTarget = undefined;
-        $('.cover').css({ width: 0, height: 0 });
-        if(self.options.showTags) {
-          $('.tag').remove();
+        if(!self.data.isFrozen) {
+          $(self.data.element).css('cursor', 'default');
+          $(self.data.element).find('*:not(.ui.inspector)').off();
+          self.data.inspectionTarget = undefined;
+          $('.cover').css({ width: 0, height: 0 });
+          if(self.options.showTags) {
+            $('.tag').remove();
+          }
         }
       }
     },

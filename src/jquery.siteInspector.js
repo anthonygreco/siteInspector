@@ -11,8 +11,11 @@
         element: element,
         inspectionEnabled: false,
         isFrozen: false,
-        inspectionTarget: undefined
+        inspectionTarget: undefined,
+        pageEvents: [],
+        pageEventsEnabled: true
       };
+      self._checkBeforeLeaving();
       self._buildUI();
       if(self.options.debug) {
         console.timeEnd('init');
@@ -160,6 +163,11 @@
           $(this).css(covers[index]);
         });
       }
+    },
+    _checkBeforeLeaving: function() {
+      window.onbeforeunload = function() {
+        return 'Are you sure you want to leave?';
+      };
     },
     isEnabled: function() {
       var self = this;

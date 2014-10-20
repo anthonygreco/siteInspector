@@ -65,6 +65,9 @@
     _toggleInspection: function() {
       var self = this;
       self.data.inspectionEnabled = !self.data.inspectionEnabled;
+      if(self.options.debug) {
+        console.log('Inspection is Enabled', self.data.inspectionEnabled);
+      }
       if(self.data.inspectionEnabled) {
         $(self.data.element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
@@ -176,6 +179,9 @@
     toggleFrozen: function() {
       var self = this;
       self.data.isFrozen = !self.data.isFrozen;
+      if(self.options.debug) {
+        console.log('Inspection is Frozen', self.data.isFrozen);
+      }
     }
   };
   $.fn.siteInspector = function(options) {

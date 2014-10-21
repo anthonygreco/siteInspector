@@ -82,6 +82,7 @@
       } else {
         if(!self.data.isFrozen) {
           $(self.data.element).css('cursor', 'default');
+          $('#uiWrapper #inspect i').removeClass('active');
           $(self.data.element).find('*:not(.ui)').off();
           self.data.inspectionTarget = undefined;
           $('.cover').css({ width: 0, height: 0 });

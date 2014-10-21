@@ -71,7 +71,7 @@
       if(self.data.inspectionEnabled) {
         $(self.data.element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
-        $(self.data.element).find('*:not(.ui.inspector)').on({
+        $(self.data.element).find('*:not(.ui)').on({
           mouseenter: function(e) {
             if(!self.data.isFrozen) {
               self.data.inspectionTarget = e.currentTarget;
@@ -82,7 +82,7 @@
       } else {
         if(!self.data.isFrozen) {
           $(self.data.element).css('cursor', 'default');
-          $(self.data.element).find('*:not(.ui.inspector)').off();
+          $(self.data.element).find('*:not(.ui)').off();
           self.data.inspectionTarget = undefined;
           $('.cover').css({ width: 0, height: 0 });
           if(self.options.showTags) {

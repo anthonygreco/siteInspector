@@ -96,7 +96,7 @@ jQuery.fn.extend({
           mouseenter: function(e) {
             if(!self.data.isFrozen) {
               self.data.inspectionTarget = e.currentTarget;
-              self._highlightElement();
+              self.highlightElement();
             }
           }
         });
@@ -105,8 +105,7 @@ jQuery.fn.extend({
           $(self.data.element).css('cursor', 'default');
           $('#uiWrapper #inspect i').removeClass('active');
           $(self.data.element).find('*:not(.ui)').off();
-          self.data.inspectionTarget = undefined;
-          $('.cover').css({ width: 0, height: 0 });
+          self.unhighlight();
           if(self.options.showTags) {
             $('.tag').remove();
           }
@@ -116,7 +115,7 @@ jQuery.fn.extend({
     _refreshDisplay: function() {
       var self = this;
       if(self.data.inspectionEnabled) {
-        self._highlightElement();
+        self.highlightElement();
       }
     },
     _showTags: function() {
@@ -145,9 +144,25 @@ jQuery.fn.extend({
       className = (self.data.inspectionTarget.className !== '')? '<span class="ui inspector className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
       return nodeName + id + className + ' <span class="ui inspector dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="ui inspector fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
     },
-    _highlightElement: function() {
+    _checkBeforeLeaving: function() {
+      window.onbeforeunload = function() {
+        return 'Are you sure you want to leave?';
+      };
+    },
+    isEnabled: function() {
+      var self = this;
+      return self.data.inspectionEnabled;
+    },
+    toggleFrozen: function() {
+      var self = this;
+      self.data.isFrozen = !self.data.isFrozen;
+      if(self.options.debug) {
+        console.log('Inspection is Frozen', self.data.isFrozen);
+      }
+    },
+    highlightElement: function(target) {
       var self = this,
-      $element = $(self.data.inspectionTarget);
+      $element = (target === undefined)? $(self.data.inspectionTarget) : $(target);
       if($element.offset() !== undefined) {
         if(self.options.showTags) {
           self._showTags();
@@ -189,21 +204,10 @@ jQuery.fn.extend({
         });
       }
     },
-    _checkBeforeLeaving: function() {
-      window.onbeforeunload = function() {
-        return 'Are you sure you want to leave?';
-      };
-    },
-    isEnabled: function() {
+    unhighlight: function() {
       var self = this;
-      return self.data.inspectionEnabled;
-    },
-    toggleFrozen: function() {
-      var self = this;
-      self.data.isFrozen = !self.data.isFrozen;
-      if(self.options.debug) {
-        console.log('Inspection is Frozen', self.data.isFrozen);
-      }
+      self.data.inspectionTarget = undefined;
+      $('.cover').css({ width: 0, height: 0 });
     }
   };
   $.fn.siteInspector = function(options) {

@@ -22,15 +22,6 @@ module.exports = function(grunt) {
         ' *  Under <%= pkg.licenses[0].type %> License\n' +
         ' */\n'
     },
-    concat: {
-      dist: {
-        src: ['components/uniqueSelector/src/jquery.uniqueSelector.js', 'src/jquery.siteInspector.js'],
-        dest: 'dist/jquery.siteInspector.js'
-      },
-      options: {
-        banner: '<%= meta.banner %>'
-      }
-    },
     jshint: {
       files: ['src/jquery.siteInspector.js'],
       options: {
@@ -39,7 +30,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       my_target: {
-        src: ['dist/jquery.siteInspector.js'],
+        src: ['src/jquery.siteInspector.js'],
         dest: 'dist/jquery.siteInspector.min.js'
       },
       options: {
@@ -47,5 +38,5 @@ module.exports = function(grunt) {
       }
     }
   });
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify']);
+  grunt.registerTask('default', ['clean', 'jshint', 'uglify']);
 };

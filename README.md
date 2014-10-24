@@ -19,7 +19,6 @@ $('body').data('siteInspector').isEnabled()
 ```
 
 ## Todo
-* Fix public/private scope.
 * Warn if css is missing.
 
 

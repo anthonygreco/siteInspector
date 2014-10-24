@@ -25,11 +25,12 @@ module.exports = function(grunt) {
     jshint: {
       files: ['src/jquery.siteInspector.js'],
       options: {
-        jshintrc: '.jshintrc'
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
       }
     },
     uglify: {
-      my_target: {
+      target: {
         src: ['src/jquery.siteInspector.js'],
         dest: 'dist/jquery.siteInspector.min.js'
       },

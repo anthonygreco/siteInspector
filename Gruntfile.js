@@ -3,6 +3,35 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('siteInspector.jquery.json'),
+    watch: {
+      css: {
+        files: ['sass/**/*.scss'],
+        tasks: ['compass', 'cssmin']
+      },
+      js: {
+        files: ['src/jquery.siteInspector.js'],
+        tasks: ['jshint']
+      }
+    },
+    compass: {
+      compile: {
+        options: {
+          config: 'sass-config.rb'
+        }
+      }
+    },
+    cssmin: {
+      options: {
+        report: 'min'
+      },
+      minify: {
+        expand: true,
+        cwd: 'css/',
+        src: ['*.css', '!*.min.css'],
+        dest: 'css/',
+        ext: '.min.css'
+      }
+    },
     clean: {
       dist: {
         files: [
@@ -39,5 +68,6 @@ module.exports = function(grunt) {
       }
     }
   });
-  grunt.registerTask('default', ['clean', 'jshint', 'uglify']);
+  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('build', ['clean', 'jshint', 'uglify']);
 };

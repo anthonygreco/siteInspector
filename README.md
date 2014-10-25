@@ -2,21 +2,25 @@
 
 *A jQuery plugin to inspect a site's markup.*
 
-## Build
+## Development
 ```sh
 npm install
 bower install
-grunt
+grunt # runs watch command (compass & jshint)
+grunt build # minify js to /dist
 ```
-
 
 ## Usage
 ```javascript
 // init
 $('body').siteInspector();
 // check if inspection is enabled; returns true|false
-$('body').data('siteInspector').isEnabled()
+$('body').siteInspector('isEnabled');
 ```
+
+## Options
+* debug (true|false:default)
+* showTags (true|false:default)
 
 ## Todo
 * Warn if css is missing.

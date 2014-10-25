@@ -4,6 +4,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('siteInspector.jquery.json'),
     watch: {
+      options: {
+        atBegin: true
+      },
       css: {
         files: ['sass/**/*.scss'],
         tasks: ['compass', 'cssmin']

@@ -1,156 +1,205 @@
 'use strict';
-(function($, window, document, undefined) {
-  var Inspector = {
-    init: function(options, element) {
-      var self = this;
-      self.options = $.extend({}, $.fn.siteInspector.options, options);
-      if(self.options.debug) {
-        console.time('init');
+(function($) {
+
+  function Inspector(elem, options) {
+    var element = elem,
+    $element = $(elem),
+    inspectionEnabled = false,
+    isFrozen = false,
+    inspectionTarget = null,
+    settings = $.extend({}, $.fn.siteInspector.defaults, options);
+
+    function init() {
+      if(settings.debug) {
+        console.time('Init');
       }
-      self.data = {
-        element: element,
-        inspectionEnabled: false,
-        isFrozen: false,
-        inspectionTarget: undefined,
-        pageEvents: [],
-        pageEventsEnabled: true
-      };
-      self._checkBeforeLeaving();
-      self._buildUI();
-      if(self.options.debug) {
-        console.timeEnd('init');
+      appendCSS();
+      buildUI();
+      hook('onInit');
+      if(settings.debug) {
+        console.timeEnd('Init');
       }
-    },
-    _buildUI: function() {
-      var self = this,
-      $cover = $('<div />', { class: 'cover ui inspector' }),
+    }
+
+    function destroy() {
+      if(settings.debug) {
+        console.log('Destroying Plugin');
+      }
+      $element.each(function() {
+        unbindWindowEvents();
+        unbindInspection();
+        unbindLeave();
+        $(this).find('.ui.inspector').remove();
+        hook('onDestroy');
+        $(this).removeData('siteInspector');
+      });
+    }
+
+    function option(key, val) {
+      if(val) {
+        if(settings.debug) {
+          console.log('Setting option for ' + key + ' to ' + val);
+        }
+        settings[key] = val;
+      } else {
+        if(settings.debug) {
+          console.log('Returning option for ' + key + ' as ' + settings[key]);
+        }
+        return settings[key];
+      }
+    }
+
+    function hook(method) {
+      if(settings[method] !== undefined) {
+        settings[method].call(element);
+      } else {
+        throw new Error('Hook ' +  method + ' does not exist on jQuery.siteInspector');
+      }
+    }
+
+    function appendCSS() {
+      if(settings.debug) {
+        console.log('Appending CSS');
+      }
+      
+      var cssFile = (settings.cssFile)? settings.cssFile : (settings.debug)? '../css/jquery-siteInspector.css' : '../css/jquery-siteInspector.min.css';
+      $('head').append('<link rel="stylesheet" href="../components/font-awesome/css/font-awesome.css" /><link rel="stylesheet" href="' + cssFile + '" />');
+    }
+
+    function buildUI() {
+      if(settings.debug) {
+        console.log('Building UI');
+      }
+      var $cover = $('<div />', { class: 'cover ui inspector' }),
       $overlay = $('<div />', { id: 'overlay', class: 'ui inspector' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
-      $inspectButton = $('<div />', { id: 'inspect', class: 'ui inspector' }).on(self._bindInspection()).append($('<i />', { class: 'fa fa-search ui inspector' })),
-      $uiBox = $('<div />', { id: 'uiWrapper', class: 'ui inspector' }).append($inspectButton);
-      $('body').append([$uiBox, $overlay]);
-      self._bindWindowEvents();
-    },
-    _bindWindowEvents: function() {
-      var self = this;
+      $inspectButton = $('<div />', { id: 'inspect', class: 'ui inspector' }).on(bindInspection()).append($('<i />', { class: 'fa fa-search ui inspector' })),
+      $uiBox = $('<div />', { id: 'uiWrapper', class: 'ui inspector' }).append($inspectButton),
+      $tag = $('<div />', { class: 'tag ui inspector' });
+      $('body').append([$uiBox, $overlay, $tag]);
+      bindWindowEvents();
+      bindLeave();
+    }
+
+    function bindWindowEvents() {
+      if(settings.debug) {
+        console.log('Binding Window Events');
+      }
       $(window).on({
-        scroll: function() {
-          self._refreshDisplay();
+        'scroll.siteInspector.window': function() {
+          refreshDisplay();
         },
-        resize: function() {
-          self._refreshDisplay();
+        'resize.siteInspector.window': function() {
+          refreshDisplay();
         }
       });
-    },
-    _unbindWindowEvents: function() {
-      $(window).off('scroll resize');
-    },
-    _bindInspection: function() {
-      var self = this;
+    }
+
+    function unbindWindowEvents() {
+      if(settings.debug) {
+        console.log('Unbinding Window Events');
+      }
+      $(window).off('scroll.siteInspector.window resize.siteInspector.window');
+    }
+
+    function bindLeave() {
+      if(settings.debug) {
+        console.log('Binding Leave Event');
+      }
+      window.onbeforeunload = function() {
+        if(inspectionEnabled) {
+          return 'INSPECTION IS CURRENTLY ENABLED!';
+        }
+      };
+    }
+
+    function unbindLeave() {
+      if(settings.debug) {
+        console.log('Unbinding Leave Event');
+      }
+      window.onbeforeunload = null;
+    }
+
+    function bindInspection() {
+      if(settings.debug) {
+        console.log('Binding Inspection Button Event');
+      }
       return {
-        click: function() {
-          self._toggleInspection();
+        'click.siteInspector.inspectionButton': function() {
+          toggleInspection();
         },
-        mouseenter: function() {
-          if(!self.data.inspectionEnabled) {
+        'mouseenter.siteInspector.inspectionButton': function() {
+          if(!inspectionEnabled) {
             $(this).find('i').addClass('active');
           }
         },
-        mouseleave: function() {
-          if(!self.data.inspectionEnabled) {
+        'mouseleave.siteInspector.inspectionButton': function() {
+          if(!inspectionEnabled) {
             $(this).find('i').removeClass('active');
           }
         }
       };
-    },
-    _toggleInspection: function() {
-      var self = this;
-      self.data.inspectionEnabled = !self.data.inspectionEnabled;
-      if(self.options.debug) {
-        console.log('Inspection is Enabled', self.data.inspectionEnabled);
+    }
+
+    function unbindInspection() {
+      if(settings.debug) {
+        console.log('Unbinding Inspection Button Event');
       }
-      if(self.data.inspectionEnabled) {
-        $(self.data.element).css('cursor', 'cell');
+      $('#inspect').off('click.siteInspector.inspectionButton mouseenter.siteInspector.inspectionButton mouseleave.siteInspector.inspectionButton');
+      $(element).find('*:not(.ui)').off('mouseenter.siteInspector.inspection');
+      $(element).css('cursor', 'default');
+    }
+
+    function toggleInspection() {
+      inspectionEnabled = !inspectionEnabled;
+      if(settings.debug) {
+        console.log('Toggling Inspection. Enabled?', inspectionEnabled);
+      }
+      if(inspectionEnabled) {
+        $(element).css('cursor', 'cell');
         $('#uiWrapper #inspect i').addClass('active');
-        $(self.data.element).find('*:not(.ui)').on({
-          mouseenter: function(e) {
-            if(!self.data.isFrozen) {
-              self.data.inspectionTarget = e.currentTarget;
-              self.highlightElement();
+        $(element).find('*:not(.ui)').on({
+          'mouseenter.siteInspector.inspection': function(e) {
+            if(!isFrozen) {
+              inspectionTarget = e.currentTarget;
+              highlightElement();
             }
           }
         });
       } else {
-        if(!self.data.isFrozen) {
-          $(self.data.element).css('cursor', 'default');
+        if(!isFrozen) {
+          $(element).css('cursor', 'default');
           $('#uiWrapper #inspect i').removeClass('active');
-          $(self.data.element).find('*:not(.ui)').off();
-          self.unhighlight();
-          if(self.options.showTags) {
+          $(element).find('*:not(.ui)').off('mouseenter.siteInspector.inspection');
+          unhighlightElement();
+          if(settings.showTags) {
             $('.tag').remove();
           }
         }
       }
-    },
-    _refreshDisplay: function() {
-      var self = this;
-      if(self.data.inspectionEnabled) {
-        self.highlightElement();
+    }
+
+    function refreshDisplay() {
+      if(inspectionEnabled) {
+        highlightElement();
       }
-    },
-    _showTags: function() {
-      var self = this,
-      elementInfo = {
-        offset: $(self.data.inspectionTarget).offset(),
-        height: $(self.data.inspectionTarget).outerHeight()
-      };
-      if($('.tag').length) {
-        if($('.tag').data('selector') === $(self.data.inspectionTarget).uniqueSelector()) {
-          return false;
-        }
-        $('.tag').remove();
-      }
-      var $tag = $('<div />', { class: 'tag ui inspector' }).data('selector', $(self.data.inspectionTarget).uniqueSelector()).html(self._formatInfo()).appendTo(self.data.element);
-      $tag.css({
-        top: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.top + elementInfo.height,
-        left: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.left,
-        position: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 'fixed' : 'absolute'
-      }).show();
-    },
-    _formatInfo: function() {
-      var self = this,
-      nodeName = '<span class="ui inspector node">' + self.data.inspectionTarget.nodeName.toLowerCase() + '</span>',
-      id = ($(self.data.inspectionTarget).attr('id') !== undefined)? '<span class="ui inspector id">#' + $(self.data.inspectionTarget).attr('id') + '</span>' : '',
-      className = (self.data.inspectionTarget.className !== '')? '<span class="ui inspector className">.' + self.data.inspectionTarget.className.split(' ').join('.') + '</span>' : '';
-      return nodeName + id + className + ' <span class="ui inspector dimensions">' + $(self.data.inspectionTarget).outerWidth() + 'px <i class="ui inspector fa fa-times" /> ' + $(self.data.inspectionTarget).outerHeight() + 'px</span>';
-    },
-    _checkBeforeLeaving: function() {
-      window.onbeforeunload = function() {
-        return 'Are you sure you want to leave?';
-      };
-    },
-    isEnabled: function() {
-      var self = this;
-      return self.data.inspectionEnabled;
-    },
-    toggleFrozen: function() {
-      var self = this;
-      self.data.isFrozen = !self.data.isFrozen;
-      if(self.options.debug) {
-        console.log('Inspection is Frozen', self.data.isFrozen);
-      }
-    },
-    highlightElement: function(target) {
-      var self = this,
-      $element = (target === undefined)? $(self.data.inspectionTarget) : $(target);
-      if($element.offset() !== undefined) {
-        if(self.options.showTags) {
-          self._showTags();
+    }
+
+    function unhighlightElement() {
+      inspectionTarget = null;
+      $('.cover').css({ width: 0, height: 0 });
+    }
+
+    function highlightElement(target) {
+      var $currentElement = (target === undefined)? $(inspectionTarget) : $(target);
+      if($currentElement.offset() !== undefined) {
+        if(settings.showTags) {
+          showTags();
         }
         var trbl = {
-          top: $element.offset().top - $(window).scrollTop(),
-          left: $element.offset().left,
-          bottom: ($element.offset().top - $(window).scrollTop()) + $element.height(),
-          right: $element.offset().left + $element.width()
+          top: $currentElement.offset().top - $(window).scrollTop(),
+          left: $currentElement.offset().left,
+          bottom: ($currentElement.offset().top - $(window).scrollTop()) + $currentElement.height(),
+          right: $currentElement.offset().left + $currentElement.width()
         },
         covers = [
           {// top
@@ -166,37 +215,101 @@
             height: $(window).height() - trbl.top
           },
           {// bottom
-            top: trbl.top + $element.outerHeight(),
+            top: trbl.top + $currentElement.outerHeight(),
             left: trbl.left,
             width: $(window).width() - trbl.left,
             height: $(window).height() - trbl.bottom
           },
           {// right
             top: trbl.top,
-            left: trbl.left + $element.outerWidth(),
-            width: $(window).width() - (trbl.left + $element.outerWidth()),
-            height: $element.outerHeight()
+            left: trbl.left + $currentElement.outerWidth(),
+            width: $(window).width() - (trbl.left + $currentElement.outerWidth()),
+            height: $currentElement.outerHeight()
           }
         ];
         $('.cover').each(function(index) {
           $(this).css(covers[index]);
         });
       }
-    },
-    unhighlight: function() {
-      var self = this;
-      self.data.inspectionTarget = undefined;
-      $('.cover').css({ width: 0, height: 0 });
+    }
+
+    function showTags() {
+      var elementInfo = {
+        offset: $(inspectionTarget).offset(),
+        height: $(inspectionTarget).outerHeight()
+      },
+      uniqueSelector = $(inspectionTarget).uniqueSelector(),
+      $tag = $('.tag');
+      if($tag.data('selector') === uniqueSelector) {
+        return false;
+      }
+      $tag.hide().data('selector', uniqueSelector).html(formatTagInfo()).css({
+        top: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.top + elementInfo.height,
+        left: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 20 : elementInfo.offset.left,
+        position: (elementInfo.offset.top + elementInfo.height + $tag.height() >= $(document).height())? 'fixed' : 'absolute'
+      }).show();
+    }
+
+    function formatTagInfo() {
+      var nodeName = '<span class="ui inspector node">' + inspectionTarget.nodeName.toLowerCase() + '</span>',
+      $inspectionTarget = $(inspectionTarget),
+      id = ($inspectionTarget.attr('id') !== undefined)? '<span class="ui inspector id">#' + $inspectionTarget.attr('id') + '</span>' : '',
+      className = (inspectionTarget.className !== '')? '<span class="ui inspector className">.' + inspectionTarget.className.split(' ').join('.') + '</span>' : '';
+      return nodeName + id + className + ' <span class="ui inspector dimensions">' + $inspectionTarget.outerWidth() + 'px <i class="ui inspector fa fa-times" /> ' + $inspectionTarget.outerHeight() + 'px</span>';
+    }
+
+    // Public Methods
+    function isEnabled() {
+      return inspectionEnabled;
+    }
+
+    function toggleFrozen() {
+      isFrozen = !isFrozen;
+      if(settings.debug) {
+        console.log('Toggling Frozen. Frozen?', isFrozen);
+      }
+      return isFrozen;
+    }
+
+    init();
+
+    // Expose public methods
+    return {
+      option: option,
+      destroy: destroy,
+      isEnabled: isEnabled,
+      toggleFrozen: toggleFrozen
+    };
+  }
+
+  $.fn.siteInspector = function(options) {
+    if(typeof arguments[0] === 'string') {
+      var methodName = arguments[0],
+      args = Array.prototype.slice.call(arguments, 1),
+      returnVal;
+      this.each(function() {
+        if($.data(this, 'siteInspector') && typeof $.data(this, 'siteInspector')[methodName] === 'function') {
+          returnVal = $.data(this, 'siteInspector')[methodName].apply(this, args);
+        } else {
+          throw new Error('Method ' +  methodName + ' does not exist on jQuery.siteInspector');
+        }
+      });
+      return (returnVal !== undefined)? returnVal : this;
+    } else if(typeof options === 'object' || !options) {
+      return this.each(function() {
+        if(!$.data(this, 'siteInspector')) {
+          $.data(this, 'siteInspector', new Inspector(this, options));
+        }
+      });
     }
   };
-  $.fn.siteInspector = function(options) {
-    return this.each(function() {
-      var siteInspector = Object.create(Inspector);
-      siteInspector.init(options, this);
-      $.data(this, 'siteInspector', siteInspector);
-    });
+
+  $.fn.siteInspector.defaults = {
+    debug: false,
+    showTags: false,
+    cssFile: false,
+    onInit: function() {},
+    onDestroy: function() {}
   };
-  $.fn.siteInspector.options = {
-    debug: false
-  };
-})(jQuery, window, document);
+
+})(jQuery);

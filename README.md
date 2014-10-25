@@ -18,7 +18,8 @@ $('body').siteInspector();
 $('body').siteInspector({
   debug: true,
   showTags: true,
-  cssFile: '../css/myCustomSiteInspector.css'
+  cssFile: '../path/to/your/custom.css',
+  fontAwesomePath: '../font-awesome/css/font-awesome.css'
 });
 // check if inspection is enabled; returns true|false
 $('body').siteInspector('isEnabled');
@@ -27,7 +28,8 @@ $('body').siteInspector('isEnabled');
 ## Options
 * debug ```true|false``` : default ```false```
 * showTags ```true|false``` : default ```false``` - Enable display of element selector and dimensions (i.e. div.container 1024px x 800px)
-* cssFile ```'../css/jquery-siteInspector.min.css'|false``` : default ```false``` - Overwrite the default css with your own (Note: CSS path is relative to the plugin file location)
+* cssPath ```'../path/to/your/custom.css'|false``` : default ```false``` - Overwrite the default css path with your own (Note: Path is relative)
+* fontAwesomePath ```'../path/to/font-awesome.css'|false``` : default ```false``` - Overwrite the default css path to Font Awesome with your own (Note: Path is relative)
 * onInit: ```function() {}``` - Hook for a method to be triggered after initialization
 * onDestroy: ```function() {}``` - Hook for a method to be triggered after destruction
 

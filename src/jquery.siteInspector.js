@@ -61,9 +61,10 @@
       if(settings.debug) {
         console.log('Appending CSS');
       }
-      
-      var cssFile = (settings.cssFile)? settings.cssFile : (settings.debug)? '../css/jquery-siteInspector.css' : '../css/jquery-siteInspector.min.css';
-      $('head').append('<link rel="stylesheet" href="../components/font-awesome/css/font-awesome.css" /><link rel="stylesheet" href="' + cssFile + '" />');
+      var ext = (settings.debug && settings.cssPath === false)? '.css' : '.min.css',
+      cssPath = (settings.cssPath)? settings.cssPath : '/css/jquery-siteInspector' + ext,
+      fontAwesomePath = (settings.fontAwesomePath)? settings.fontAwesomePath : '/components/font-awesome/css/font-awesome.css';
+      $('head').append('<link rel="stylesheet" href="' + fontAwesomePath + '" /><link rel="stylesheet" href="' + cssPath + '" />');
     }
 
     function buildUI() {
@@ -307,7 +308,8 @@
   $.fn.siteInspector.defaults = {
     debug: false,
     showTags: false,
-    cssFile: false,
+    cssPath: false,
+    fontAwesomePath: false,
     onInit: function() {},
     onDestroy: function() {}
   };

@@ -18,7 +18,7 @@ $('body').siteInspector();
 $('body').siteInspector({
   debug: true,
   showTags: true,
-  cssFile: '../path/to/your/custom.css',
+  cssPath: '../path/to/your/custom.css',
   fontAwesomePath: '../font-awesome/css/font-awesome.css'
 });
 // check if inspection is enabled; returns true|false

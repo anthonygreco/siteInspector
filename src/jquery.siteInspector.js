@@ -11,19 +11,19 @@
 
     function init() {
       if(settings.debug) {
-        console.time('Init');
+        console.time('jquery.siteInspector Init');
       }
       appendCSS();
       buildUI();
       hook('onInit');
       if(settings.debug) {
-        console.timeEnd('Init');
+        console.timeEnd('jquery.siteInspector Init');
       }
     }
 
     function destroy() {
       if(settings.debug) {
-        console.log('Destroying Plugin');
+        debugLog('Destroying Plugin');
       }
       $element.each(function() {
         unbindWindowEvents();
@@ -38,12 +38,12 @@
     function option(key, val) {
       if(val) {
         if(settings.debug) {
-          console.log('Setting option for ' + key + ' to ' + val);
+          debugLog('Setting option for ' + key + ' to ' + val);
         }
         settings[key] = val;
       } else {
         if(settings.debug) {
-          console.log('Returning option for ' + key + ' as ' + settings[key]);
+          debugLog('Returning option for ' + key + ' as ' + settings[key]);
         }
         return settings[key];
       }
@@ -59,7 +59,7 @@
 
     function appendCSS() {
       if(settings.debug) {
-        console.log('Appending CSS');
+        debugLog('Appending CSS');
       }
       var ext = (settings.debug && settings.cssPath === false)? '.css' : '.min.css',
       cssPath = (settings.cssPath)? settings.cssPath : '/css/jquery-siteInspector' + ext,
@@ -69,7 +69,7 @@
 
     function buildUI() {
       if(settings.debug) {
-        console.log('Building UI');
+        debugLog('Building UI');
       }
       var $cover = $('<div />', { class: 'cover ui inspector' }),
       $overlay = $('<div />', { id: 'overlay', class: 'ui inspector' }).append([$cover.clone(), $cover.clone(), $cover.clone(), $cover.clone()]),
@@ -83,7 +83,7 @@
 
     function bindWindowEvents() {
       if(settings.debug) {
-        console.log('Binding Window Events');
+        debugLog('Binding Window Events');
       }
       $(window).on({
         'scroll.siteInspector.window': function() {
@@ -97,14 +97,14 @@
 
     function unbindWindowEvents() {
       if(settings.debug) {
-        console.log('Unbinding Window Events');
+        debugLog('Unbinding Window Events');
       }
       $(window).off('scroll.siteInspector.window resize.siteInspector.window');
     }
 
     function bindLeave() {
       if(settings.debug) {
-        console.log('Binding Leave Event');
+        debugLog('Binding Leave Event');
       }
       window.onbeforeunload = function() {
         if(inspectionEnabled) {
@@ -115,14 +115,14 @@
 
     function unbindLeave() {
       if(settings.debug) {
-        console.log('Unbinding Leave Event');
+        debugLog('Unbinding Leave Event');
       }
       window.onbeforeunload = null;
     }
 
     function bindInspection() {
       if(settings.debug) {
-        console.log('Binding Inspection Button Event');
+        debugLog('Binding Inspection Button Event');
       }
       return {
         'click.siteInspector.inspectionButton': function() {
@@ -143,7 +143,7 @@
 
     function unbindInspection() {
       if(settings.debug) {
-        console.log('Unbinding Inspection Button Event');
+        debugLog('Unbinding Inspection Button Event');
       }
       $('#inspect').off('click.siteInspector.inspectionButton mouseenter.siteInspector.inspectionButton mouseleave.siteInspector.inspectionButton');
       $(element).find('*:not(.ui)').off('mouseenter.siteInspector.inspection');
@@ -153,7 +153,7 @@
     function toggleInspection() {
       inspectionEnabled = !inspectionEnabled;
       if(settings.debug) {
-        console.log('Toggling Inspection. Enabled?', inspectionEnabled);
+        debugLog('Toggling Inspection. Enabled? ' + inspectionEnabled);
       }
       if(inspectionEnabled) {
         $(element).css('cursor', 'cell');
@@ -259,6 +259,10 @@
       return nodeName + id + className + ' <span class="ui inspector dimensions">' + $inspectionTarget.outerWidth() + 'px <i class="ui inspector fa fa-times" /> ' + $inspectionTarget.outerHeight() + 'px</span>';
     }
 
+    function debugLog(msg) {
+      console.log('jquery.siteInspector LOG: ' + msg);
+    }
+
     // Public Methods
     function isEnabled() {
       return inspectionEnabled;
@@ -267,7 +271,7 @@
     function toggleFrozen() {
       isFrozen = !isFrozen;
       if(settings.debug) {
-        console.log('Toggling Frozen. Frozen?', isFrozen);
+        debugLog('Toggling Frozen. Frozen? ' + isFrozen);
       }
       return isFrozen;
     }

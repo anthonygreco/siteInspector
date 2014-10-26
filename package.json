@@ -4,7 +4,7 @@
   "description": "A jQuery plugin to inspect a site's markup.",
   "author": "Anthony Greco",
   "homepage": "https://github.com/anthonygreco/siteInspector/",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.7",

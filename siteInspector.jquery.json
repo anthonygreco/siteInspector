@@ -8,7 +8,7 @@
     "markup",
     "plugins"
   ],
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": {
     "name": "Anthony Greco",
     "email": "anthony.greco@gmail.com",
@@ -33,6 +33,6 @@
   "download": "https://github.com/anthonygreco/siteInspector",
   "dependencies": {
     "font-awesome": ">=4.0.0",
-    "uniqueSelector": ">=0.1.0"
+    "unique-selector": ">=0.1.0"
   }
 }

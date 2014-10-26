@@ -1,10 +1,10 @@
 {
   "name": "siteInspector",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/jquery.siteInspector.js",
   "ignore": [],
   "dependencies": {
     "font-awesome": "~4.2.0",
-    "uniqueSelector": "git@github.com:anthonygreco/uniqueSelector.git"
+    "unique-selector": ">=0.1.0"
   }
 }

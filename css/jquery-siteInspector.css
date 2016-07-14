@@ -11,12 +11,12 @@
   cursor: pointer;
   display: inline-block;
   border-right: 1px solid #000000; }
-#uiWrapper i {
+#uiWrapper #inspect.inspector i {
   font-size: 24px;
   color: #000000;
   line-height: 40px;
   padding: 0 15px; }
-#uiWrapper i.active {
+#uiWrapper #inspect.inspector i.active {
   color: #1182d8; }
 
 #overlay {
@@ -46,9 +46,11 @@
   color: #ce7433; }
 .tag .dimensions {
   color: #aaaaaa; }
-.tag .dimensions i {
+.tag .dimensions.x {
+  margin-left: 2px; }
+.tag i.glyphicon-remove {
   font-size: 0.6em;
   color: #cccccc;
   position: relative;
-  top: -2px;
+  top: -1px;
   padding: 0 3px; }

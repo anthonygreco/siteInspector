@@ -1,10 +1,9 @@
 {
   "name": "siteInspector",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/jquery.siteInspector.js",
   "ignore": [],
   "dependencies": {
-    "font-awesome": "~4.2.0",
     "unique-selector": ">=0.1.0"
   }
 }

@@ -4,6 +4,7 @@
 
 ## Development
 ```sh
+gem install sass sass-globbing
 npm install
 bower install
 grunt # runs watch command (compass & jshint)
@@ -18,8 +19,7 @@ $('body').siteInspector();
 $('body').siteInspector({
   debug: true,
   showTags: true,
-  cssPath: '../path/to/your/custom.css',
-  fontAwesomePath: '../font-awesome/css/font-awesome.css'
+  cssPath: '../path/to/your/custom.css'
 });
 // check if inspection is enabled; returns true|false
 $('body').siteInspector('isEnabled');
@@ -29,7 +29,6 @@ $('body').siteInspector('isEnabled');
 * debug ```true|false``` : default ```false```
 * showTags ```true|false``` : default ```false``` - Enable display of element selector and dimensions (i.e. div.container 1024px x 800px)
 * cssPath ```'../path/to/your/custom.css'|false``` : default ```false``` - Overwrite the default css path with your own (Note: Path is relative)
-* fontAwesomePath ```'../path/to/font-awesome.css'|false``` : default ```false``` - Overwrite the default css path to Font Awesome with your own (Note: Path is relative)
 * onInit: ```function() {}``` - Hook for a method to be triggered after initialization
 * onDestroy: ```function() {}``` - Hook for a method to be triggered after destruction
 

@@ -32,6 +32,6 @@
   "docs": "https://github.com/anthonygreco/siteInspector#readme",
   "download": "https://github.com/anthonygreco/siteInspector",
   "dependencies": {
-    "unique-selector": ">=0.1.0"
+    "unique-selector": ">=0.1.1"
   }
 }

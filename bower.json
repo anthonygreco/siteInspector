@@ -4,6 +4,6 @@
   "main": "dist/jquery.siteInspector.js",
   "ignore": [],
   "dependencies": {
-    "unique-selector": ">=0.1.0"
+    "unique-selector": ">=0.1.1"
   }
 }
